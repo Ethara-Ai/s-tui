@@ -102,10 +102,10 @@ class BarGraphVector(LabeledBarGraphVector):
         )
 
     def get_graph_name(self):
-        return self.graph_name
+        pass
 
     def get_measurement_unit(self):
-        return self.measurement_unit
+        pass
 
     def get_is_available(self):
         return self.source.get_is_available()
@@ -130,16 +130,7 @@ class BarGraphVector(LabeledBarGraphVector):
             return ""
 
     def set_smooth_colors(self, smooth):
-        self.smooth_mode = smooth
-        if smooth:
-            self.satt = {(1, 0): self.smooth_a, (2, 0): self.smooth_b}
-        else:
-            self.satt = None
-
-        for graph in self.bar_graph_vector:
-            graph.set_segment_attributes(
-                ["bg background", self.color_a, self.color_b], satt=self.satt
-            )
+        pass
 
     def update(self):
         if not self.get_is_available():
@@ -250,8 +241,4 @@ class BarGraphVector(LabeledBarGraphVector):
             self.set_visible_graphs()
 
     def reset(self):
-        self.graph_data = []
-        # Like in init, we create new instances for each list
-        for _ in range(self.graph_count):
-            self.graph_data.append([0] * self.num_samples)
-        self.graph_max = 1
+        pass

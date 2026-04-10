@@ -55,14 +55,12 @@ STRATEGY_LABELS = {
 
 def get_default_strategy() -> str:
     """Return the best available strategy key."""
-    return STRATEGY_NUMPY if _HAS_NUMPY else STRATEGY_HASHLIB
+    pass
 
 
 def strategy_available(strategy: str) -> bool:
     """Return True if the given strategy can actually run."""
-    if strategy == STRATEGY_NUMPY:
-        return _HAS_NUMPY
-    return True
+    pass
 
 
 def _worker_numpy(stop_event: EventType) -> None:
@@ -74,26 +72,12 @@ def _worker_numpy(stop_event: EventType) -> None:
     (which actually *reduce* thermal output).  Benchmarks show this
     approach matches external ``stress`` in temperature generation.
     """
-    import numpy as np  # pyright: ignore[reportMissingImports]
-
-    # 100K doubles = 800KB — fits in L2, large enough to minimize
-    # Python loop overhead relative to time spent in numpy C code.
-    size = 100_000
-    a = np.random.random(size) + 1.0
-    b = np.random.random(size) + 1.0
-    out = np.empty(size, dtype=np.float64)
-    while not stop_event.is_set():
-        np.multiply(a, b, out=out)
-        np.sqrt(out, out=out)
-        np.add(out, a, out=out)
-        np.sin(out, out=out)
+    pass
 
 
 def _worker_hashlib(stop_event: EventType) -> None:
     """CPU-intensive worker using SHA-256 hashing."""
-    block = b"\x00" * 65536  # 64KB
-    while not stop_event.is_set():
-        hashlib.sha256(block).digest()
+    pass
 
 
 class BuiltinStresser:
@@ -114,36 +98,7 @@ class BuiltinStresser:
         ``STRATEGY_HASHLIB``.  Falls back to hashlib if the requested
         strategy is unavailable.
         """
-        if strategy is None:
-            strategy = get_default_strategy()
-        if not strategy_available(strategy):
-            logging.warning(
-                "Strategy %s unavailable, falling back to hashlib", strategy
-            )
-            strategy = STRATEGY_HASHLIB
-
-        worker_fn = _worker_numpy if strategy == STRATEGY_NUMPY else _worker_hashlib
-
-        self.stop()  # clean up any previous run
-        self._stop_event = Event()
-        try:
-            for _ in range(num_workers):
-                p = Process(target=worker_fn, args=(self._stop_event,), daemon=True)
-                p.start()
-                self._workers.append(p)
-        except OSError:
-            logging.exception(
-                "Failed to start all built-in stress workers; cleaning up %d "
-                "already-started workers",
-                len(self._workers),
-            )
-            self.stop()
-            raise
-        logging.info(
-            "Built-in stresser started %d workers (strategy: %s)",
-            num_workers,
-            STRATEGY_LABELS.get(strategy, strategy),
-        )
+        pass
 
     def stop(self, timeout: int = 3) -> None:
         """Graduated teardown: signal → join → terminate → kill."""
@@ -169,4 +124,4 @@ class BuiltinStresser:
 
     def is_running(self) -> bool:
         """Return True if any worker process is still alive."""
-        return any(p.is_alive() for p in self._workers)
+        pass

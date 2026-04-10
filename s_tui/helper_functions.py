@@ -50,19 +50,7 @@ except AttributeError:
 
 def get_processor_name() -> str:
     """Returns the processor name in the system"""
-    if platform.system() == "Linux":
-        with open("/proc/cpuinfo") as cpuinfo:
-            for line in cpuinfo:
-                if "model name" in line:
-                    return re.sub(r".*model name.*:", "", line, count=1)
-    elif platform.system() == "FreeBSD":
-        return subprocess.check_output(["sysctl", "-n", "hw.model"], text=True).strip()
-    elif platform.system() == "Darwin":
-        return subprocess.check_output(
-            ["sysctl", "-n", "machdep.cpu.brand_string"], text=True
-        ).strip()
-
-    return platform.processor()
+    pass
 
 
 def kill_child_processes(parent_proc: psutil.Process | None, timeout: int = 3) -> None:
@@ -181,75 +169,56 @@ def output_to_json(sources: list) -> None:
 
 def _get_xdg_config_home() -> str:
     """Return the XDG config home directory, with fallback to ~/.config"""
-    user_home = os.getenv("XDG_CONFIG_HOME")
-    if user_home:
-        return user_home
-    return os.path.expanduser(os.path.join("~", ".config"))
+    pass
 
 
 def get_config_dir() -> str:
     """
     Return the path to the user home config directory
     """
-    return _get_xdg_config_home()
+    pass
 
 
 def get_user_config_dir() -> str:
     """
     Return the path to the user s-tui config directory
     """
-    return os.path.join(_get_xdg_config_home(), "s-tui")
+    pass
 
 
 def get_user_config_file() -> str:
     """
     Return the path to the user s-tui config file
     """
-    return os.path.join(get_user_config_dir(), "s-tui.conf")
+    pass
 
 
 def user_config_dir_exists() -> bool:
     """
     Check whether the user s-tui config dir exists or not
     """
-    return os.path.isdir(get_user_config_dir())
+    pass
 
 
 def config_dir_exists() -> bool:
     """
     Check whether the home config dir exists or not
     """
-    return os.path.isdir(get_config_dir())
+    pass
 
 
 def user_config_file_exists() -> bool:
     """
     Check whether the user s-tui config file exists or not
     """
-    return os.path.isfile(get_user_config_file())
+    pass
 
 
 def make_user_config_dir() -> str | None:
     """
     Create the user s-tui config directory if it doesn't exist
     """
-    config_dir = get_config_dir()
-    config_path = get_user_config_dir()
-
-    if not config_dir_exists():
-        try:
-            os.mkdir(config_dir)
-        except OSError:
-            return None
-
-    if not user_config_dir_exists():
-        try:
-            os.mkdir(config_path)
-            os.mkdir(os.path.join(config_path, "hooks.d"))
-        except OSError:
-            return None
-
-    return config_path
+    pass
 
 
 def seconds_to_text(secs: float) -> str:
@@ -262,30 +231,12 @@ def seconds_to_text(secs: float) -> str:
 
 def str_to_bool(string: str) -> bool:
     """Converts a string to a boolean"""
-    if string == "True":
-        return True
-    if string == "False":
-        return False
-    raise ValueError
+    pass
 
 
 def which(program: str) -> str | None:
     """Find the path of an executable"""
-
-    def is_exe(fpath):
-        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-
-    fpath, _ = os.path.split(program)
-    if fpath:
-        if is_exe(program):
-            return program
-    else:
-        for path in os.environ["PATH"].split(os.pathsep):
-            exe_file = os.path.join(path, program)
-            if is_exe(exe_file):
-                return exe_file
-
-    return None
+    pass
 
 
 def _open_binary(fname: str, **kwargs: Any) -> IO[bytes]:

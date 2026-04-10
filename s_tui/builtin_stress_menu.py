@@ -99,45 +99,28 @@ class BuiltinStressMenu:
     def _on_strategy_change(
         self, button: urwid.RadioButton, state: bool, key: str
     ) -> None:
-        if state:
-            self._pending_strategy = key
+        pass
 
     def get_size(self) -> tuple[int, int]:
         return len(self.titles) + 5, self.MAX_TITLE_LEN
 
     def get_num_workers(self) -> int:
         """Return the configured number of workers (minimum 1)."""
-        try:
-            return max(1, int(self.num_workers))
-        except ValueError:
-            return 1
+        pass
 
     def get_strategy(self) -> str:
         """Return the selected strategy key."""
-        return self.strategy
+        pass
 
     def _restore_ui(self) -> None:
         """Reset UI controls to match committed state."""
-        self.num_workers_ctrl.set_edit_text(self.num_workers)
-        self._strategy_buttons[self.strategy].set_state(True)
-        self._pending_strategy = self.strategy
+        pass
 
     def on_default(self, _) -> None:
-        self.num_workers = str(psutil.cpu_count() or 1)
-        self.strategy = get_default_strategy()
-        self._restore_ui()
-        self.return_fn()
+        pass
 
     def on_save(self, _) -> None:
-        raw = self.num_workers_ctrl.get_edit_text()
-        if re.match(r"\A[0-9]+\Z", raw) and int(raw) > 0:
-            self.num_workers = raw
-        else:
-            self.num_workers = str(psutil.cpu_count() or 1)
-        self.strategy = self._pending_strategy
-        self._restore_ui()
-        self.return_fn()
+        pass
 
     def on_cancel(self, _) -> None:
-        self._restore_ui()
-        self.return_fn()
+        pass

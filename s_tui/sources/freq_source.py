@@ -113,17 +113,7 @@ class FreqSource(Source):
 
     def _init_sysfs(self, total_cores: int) -> bool:
         """Initialize sysfs throttle counter baselines."""
-        any_available = False
-        for core_id in range(total_cores):
-            count = _read_throttle_count(core_id, "core_throttle_count")
-            if count is not None:
-                self._prev_core_throttle[core_id] = count
-                any_available = True
-        pkg_count = _read_throttle_count(0, "package_throttle_count")
-        if pkg_count is not None:
-            self._prev_pkg_throttle = pkg_count
-            any_available = True
-        return any_available
+        pass
 
     def _update_throttle_state(self) -> None:
         """Update per-core throttle labels, thresholds, and cached outputs."""
@@ -236,7 +226,7 @@ class FreqSource(Source):
         return self._cached_alerts
 
     def get_maximum(self) -> float:
-        return self.max_freq
+        pass
 
     def get_top(self) -> float:
         logging.debug("Returning top %s", self.top_freq)

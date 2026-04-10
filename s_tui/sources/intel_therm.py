@@ -42,13 +42,12 @@ class ThrottleStatus(NamedTuple):
 
     @property
     def any_active(self) -> bool:
-        return any(self)
+        pass
 
     @property
     def label(self) -> str:
         """Slash-separated label string, e.g. 'T/W' or empty."""
-        parts = [lbl for (_, lbl), active in zip(_REASON_BITS, self) if active]
-        return "/".join(parts)
+        pass
 
 
 def read_therm_status(cpu: int) -> ThrottleStatus:
@@ -66,10 +65,4 @@ def read_therm_status(cpu: int) -> ThrottleStatus:
 
 def available() -> bool:
     """Check if Intel MSR throttle detection is usable."""
-    if not msr_available():
-        return False
-    try:
-        read_msr(0, IA32_THERM_STATUS)
-        return True
-    except (OSError, ValueError):
-        return False
+    pass

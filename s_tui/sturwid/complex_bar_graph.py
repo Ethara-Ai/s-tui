@@ -30,14 +30,7 @@ class ScalableBarGraph(urwid.BarGraph):
     _size = (0, 0)
 
     def render(self, size, focus=False):
-        canvas = super().render(size, focus)
-        new_size = (int(canvas.rows()), int(canvas.cols()))
-        old_size = self._size
-        # check if to raise *on_resize* event
-        if new_size != old_size:
-            self.on_resize(new_size)
-        self._size = new_size
-        return canvas
+        pass
 
     def calculate_bar_widths(self, size, bardata):
         """
@@ -46,23 +39,7 @@ class ScalableBarGraph(urwid.BarGraph):
         If self.bar_width is None this implementation will stretch
         the bars across the available space specified by maxcol.
         """
-        maxcol, _ = size
-
-        if self.bar_width is not None:
-            return [self.bar_width] * min(len(bardata), int(maxcol / self.bar_width))
-
-        if len(bardata) >= maxcol:
-            return [1] * maxcol
-
-        widths = []
-        grow = maxcol
-        remain = len(bardata)
-        for _ in bardata:
-            w = int(float(grow) / remain + 0.5)
-            widths.append(w)
-            grow -= w
-            remain -= 1
-        return widths
+        pass
 
     def get_size(self):
         return self._size
@@ -112,11 +89,7 @@ class LabeledBarGraphVector(urwid.WidgetPlaceholder):
         self.set_visible_graphs(visible_graph_list)
 
     def set_title(self, title):
-        if not title:
-            return
-        title_text_w = urwid.Text(title, align="center")
-        list_w = urwid.SimpleFocusListWalker([title_text_w])
-        self.title.original_widget = urwid.ListBox(list_w)
+        pass
 
     def set_y_label(self, y_label):
         if not y_label:
@@ -189,8 +162,8 @@ class LabeledBarGraphVector(urwid.WidgetPlaceholder):
         self.original_widget = init_widget
 
     def set_graph(self, graph_vector):
-        self.bar_graph_vector = graph_vector
+        pass
 
     @staticmethod
     def check_label(label):
-        return (len(label) >= 2 and None not in label) or not label or label is None
+        pass

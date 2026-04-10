@@ -38,14 +38,7 @@ class ScriptHookLoader:
         Return ScriptHook for source_name Source and with a ready timeout
         of timeoutMilliseconds
         """
-
-        script_path = os.path.join(
-            self.scripts_dir_path, self._source_to_script_name(source_name)
-        )
-
-        if os.path.isfile(script_path):
-            return ScriptHook(script_path, timeoutMilliseconds)
-        return None
+        pass
 
     def _source_to_script_name(self, source_name: str) -> str:
-        return source_name.lower() + ".sh"
+        pass

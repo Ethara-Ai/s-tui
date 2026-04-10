@@ -184,10 +184,10 @@ class TempSource(Source):
 
     def get_max_triggered(self) -> bool:
         """Returns whether the current temperature threshold is exceeded"""
-        return self.max_temp > self.temp_thresh
+        pass
 
     def reset(self) -> None:
-        self.max_temp = 10
+        pass
 
     def get_maximum(self) -> float:
         raise NotImplementedError("Get maximum is not implemented")

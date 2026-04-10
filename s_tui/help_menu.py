@@ -86,4 +86,4 @@ class HelpMenu:
 
     def on_cancel(self, w):
         """Returns to original widget"""
-        self.return_fn()
+        pass

@@ -75,33 +75,13 @@ DEFAULT_PALETTE = [
 class ViListBox(urwid.ListBox):
     # Catch key presses in box and pass them as arrow keys
     def keypress(self, size, key):
-        if key == "j":
-            key = "down"
-        elif key == "k":
-            key = "up"
-        elif key == "h":
-            key = "left"
-        elif key == "l":
-            key = "right"
-        elif key == "G":
-            key = "page down"
-        elif key == "g":
-            key = "page up"
-        elif key == "x":
-            key = "enter"
-        elif key == "q":
-            key = "q"
-        return super().keypress(size, key)
+        pass
 
 
 def radio_button(group, label, fn):
     """Inheriting radio button of urwid"""
-    w = urwid.RadioButton(group, label, False, on_state_change=fn)
-    w = urwid.AttrMap(w, "button normal", "button select")
-    return w
+    pass
 
 
 def button(t, fn, data=None):
-    w = urwid.Button(t, fn, data)
-    w = urwid.AttrMap(w, "button normal", "button select")
-    return w
+    pass

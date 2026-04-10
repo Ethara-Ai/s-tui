@@ -116,7 +116,7 @@ class RaplPowerSource(Source):
         self.last_probe_time = current_measurement_time
 
     def get_maximum(self) -> float:
-        return self.max_power
+        pass
 
     def get_top(self) -> int:
         return 1

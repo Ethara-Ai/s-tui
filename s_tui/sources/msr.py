@@ -20,8 +20,4 @@ def read_msr(cpu: int, register: int) -> int:
 
 def msr_available() -> bool:
     """Check if MSR device files are readable (requires root + msr module)."""
-    try:
-        with open("/dev/cpu/0/msr", "rb"):
-            return True
-    except (FileNotFoundError, PermissionError, OSError):
-        return False
+    pass

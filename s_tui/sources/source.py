@@ -107,15 +107,15 @@ class Source:
 
     def get_measurement_unit(self) -> str:
         """Returns measurement unit of source"""
-        return self.measurement_unit
+        pass
 
     def get_pallet(self) -> tuple[str, ...]:
         """Returns the pallet of the source for graph plotting"""
-        return self.pallet
+        pass
 
     def get_alert_pallet(self) -> tuple[str, ...] | None:
         """Returns the 'alert' pallet for graph plotting"""
-        return self.alert_pallet
+        pass
 
     def get_sensor_alerts(self) -> list[str | None]:
         """Per-sensor urwid attribute for summary coloring, or None."""
@@ -141,10 +141,7 @@ class Source:
         """
         Add hook to be triggered when the threshold of this Source is surpassed
         """
-        if hook is None:
-            return
-
-        self.edge_hooks.append(hook)
+        pass
 
     def eval_hooks(self) -> None:
         """
@@ -162,12 +159,7 @@ class Source:
         self, total_cores: int, online_ids: list[int] | None
     ) -> None:
         """Mark cores not in online_ids as unavailable in sensor_available."""
-        if online_ids is None:
-            return
-        online_set = set(online_ids)
-        for core_id in range(total_cores):
-            if core_id not in online_set:
-                self.sensor_available[core_id + 1] = False
+        pass
 
     @staticmethod
     def _get_online_cpu_ids() -> list[int] | None:
@@ -192,28 +184,14 @@ class Source:
         os.sysconf('SC_NPROCESSORS_CONF') returns all configured processors
         including offline ones. Available on POSIX (Linux, BSD, macOS).
         """
-        if psutil is None:
-            return 0
-        total = psutil.cpu_count(logical=True) or 0
-
-        try:
-            online_ids = psutil.Process().cpu_affinity()
-            if online_ids:
-                total = max(total, max(online_ids) + 1)
-        except (AttributeError, OSError, psutil.Error):
-            pass
-
-        with contextlib.suppress(AttributeError, ValueError, OSError):
-            total = max(total, os.sysconf("SC_NPROCESSORS_CONF"))
-
-        return total
+        pass
 
 
 class MockSource(Source):
     """Mock class for testing"""
 
     def get_maximum(self) -> int:
-        return 20
+        pass
 
     def get_summary(self) -> OrderedDict[str, str]:
         return OrderedDict({"MockValue": "5", "Tahat": "34"})

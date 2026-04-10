@@ -47,31 +47,10 @@ class SummaryTextList:
         return (attr, text) if attr else text
 
     def get_text_item_list(self):
-        summery_text_list = []
-        alerts = self.source.get_sensor_alerts()
-        suffixes = self.source.get_sensor_suffixes()
-        summary_items = list(self.source.get_summary().items())
-        for item_idx, (key, val) in enumerate(summary_items):
-            label_w = urwid.Text(str(key[0 : self.MAX_LABEL_L]))
-            # item_idx 0 is the source title row; sensor alerts start at index 1.
-            display_val = self._format_display_val(val, alerts, suffixes, item_idx - 1)
-            value_w = urwid.Text(display_val, align="right")
-            # This can be accessed by the update method
-            self.summary_text_items[key] = value_w
-            col_w = urwid.Columns([("weight", 1.5, label_w), value_w])
-            # Use setdefault for atomic check-and-set (faster than try/except)
-            is_visible = self.visible_summaries.setdefault(key, True)
-            if is_visible:
-                summery_text_list.append(col_w)
-
-        return summery_text_list
+        pass
 
     def update_visibility(self, visible_sensors):
-        keys = list(self.visible_summaries.keys())
-        self.visible_summaries[keys[0]] = any(visible_sensors)
-        # Do not change visibility of title
-        for sensor, visible in zip(keys[1:], visible_sensors):
-            self.visible_summaries[sensor] = visible
+        pass
 
     def update(self):
         alerts = self.source.get_sensor_alerts()

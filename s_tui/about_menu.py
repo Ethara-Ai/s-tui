@@ -73,4 +73,4 @@ class AboutMenu:
         return MESSAGE_LEN + 3, self.MAX_TITLE_LEN
 
     def on_cancel(self, w):
-        self.return_fn()
+        pass

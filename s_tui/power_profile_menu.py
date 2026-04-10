@@ -54,76 +54,22 @@ _EPP_TO_PROFILE = {
 
 def read_available(path: str) -> list[str]:
     """Read space-separated values from a sysfs file, return empty list on failure."""
-    try:
-        return cat(path, binary=False).split()
-    except OSError:
-        return []
+    pass
 
 
 def _read_current(path: str) -> str:
     """Read the current value from a sysfs file."""
-    try:
-        return cat(path, binary=False).strip()
-    except OSError:
-        return ""
+    pass
 
 
 def _write_all_cores(pattern: str, value: str) -> None:
     """Write a value to all matching sysfs paths (requires root)."""
-    paths = sorted(glob.glob(pattern))
-    if not paths:
-        raise OSError(f"No sysfs paths found for {pattern}")
-    errors: list[OSError] = []
-    for path in paths:
-        try:
-            with open(path, "w") as f:
-                f.write(value)
-        except OSError as e:
-            errors.append(e)
-    if errors:
-        # Some cores may transiently report "busy" even though the write
-        # propagated successfully.  Verify by reading cpu0's current value.
-        actual = _read_current(paths[0]).strip()
-        if actual == value:
-            logging.debug(
-                "%d/%d cores reported errors writing '%s', "
-                "but value applied successfully",
-                len(errors),
-                len(paths),
-                value,
-            )
-            return
-        # Produce a short message when all cores fail with the same reason
-        reasons = {e.strerror or str(e) for e in errors}
-        if len(reasons) == 1:
-            reason = reasons.pop()
-            raise OSError(f"{reason} (all {len(errors)} cores)")
-        raise OSError("; ".join(f"{e.filename}: {e}" for e in errors))
+    pass
 
 
 def _set_epp_via_powerprofilesctl(exe: str, epp_value: str) -> None:
     """Set EPP using powerprofilesctl. Raises OSError on failure."""
-    profile = _EPP_TO_PROFILE.get(epp_value)
-    if profile is None:
-        raise OSError(
-            f"No powerprofilesctl mapping for '{epp_value}', "
-            f"direct sysfs write required"
-        )
-    try:
-        result = subprocess.run(
-            [exe, "set", profile],
-            capture_output=True,
-            text=True,
-            timeout=5,
-        )
-    except subprocess.TimeoutExpired as exc:
-        raise OSError(f"powerprofilesctl timed out setting '{profile}'") from exc
-    if result.returncode != 0:
-        stderr = result.stderr.strip().lower()
-        if "busy" in stderr:
-            gov = _read_current(SYSFS_GOVERNOR) or "unknown"
-            raise OSError(f"Cannot change EPP (governor: {gov})")
-        raise OSError(f"powerprofilesctl set {profile} failed")
+    pass
 
 
 class PowerProfileMenu:
@@ -176,155 +122,35 @@ class PowerProfileMenu:
         )
 
     def _build_ui(self) -> None:
-        title = urwid.Text(("bold text", "  Power Profile  \n"), "center")
-        self.titles = [title]
-
-        # Governor section
-        self.governor_group: list[urwid.RadioButton] = []
-        self.governor_buttons: list[urwid.AttrMap] = []
-        if len(self.available_governors) > 1:
-            self.titles.append(urwid.Text(("bold text", "Governor"), align="center"))
-            if self.governor_controllable:
-                current_gov = _read_current(SYSFS_GOVERNOR)
-                for gov in self.available_governors:
-                    w = urwid.RadioButton(
-                        self.governor_group, gov, state=(gov == current_gov)
-                    )
-                    am = urwid.AttrMap(w, "button normal", "button select")
-                    self.governor_buttons.append(am)
-                    self.titles.append(am)
-            else:
-                current_gov = _read_current(SYSFS_GOVERNOR)
-                for gov in self.available_governors:
-                    marker = " *" if gov == current_gov else ""
-                    self.titles.append(urwid.Text(f"  {gov}{marker}"))
-                self.titles.append(
-                    urwid.Text(("high temp txt", "  (read-only, needs root)"))
-                )
-            self.titles.append(urwid.Divider())
-
-        # EPP section
-        self.epp_group: list[urwid.RadioButton] = []
-        self.epp_buttons: list[urwid.AttrMap] = []
-        if len(self.available_epp) > 0:
-            self.titles.append(urwid.Text(("bold text", "Energy Pref"), align="center"))
-            if self.epp_controllable:
-                current_epp = _read_current(SYSFS_EPP)
-                for epp in self.available_epp:
-                    w = urwid.RadioButton(
-                        self.epp_group, epp, state=(epp == current_epp)
-                    )
-                    am = urwid.AttrMap(w, "button normal", "button select")
-                    self.epp_buttons.append(am)
-                    self.titles.append(am)
-            else:
-                current_epp = _read_current(SYSFS_EPP)
-                for epp in self.available_epp:
-                    marker = " *" if epp == current_epp else ""
-                    self.titles.append(urwid.Text(f"  {epp}{marker}"))
-                self.titles.append(urwid.Text(("high temp txt", "  (read-only)")))
-            self.titles.append(urwid.Divider())
-
-        # Status + buttons
-        self.titles.append(self.status_text)
-
-        apply_button = urwid.Button("Apply", on_press=self.on_apply)
-        apply_button._label.align = "center"
-        cancel_button = urwid.Button("Cancel", on_press=self.on_cancel)
-        cancel_button._label.align = "center"
-        self.titles.append(urwid.Columns([apply_button, cancel_button]))
+        pass
 
     def get_size(self) -> tuple[int, int]:
         return len(self.titles) + 5, self.MAX_TITLE_LEN
 
     def is_controllable(self) -> bool:
         """Return True if at least one section is controllable."""
-        return self.governor_controllable or self.epp_controllable
+        pass
 
     def refresh_state(self) -> None:
         """Re-read current governor/EPP from sysfs and update radio buttons."""
-        if self.governor_controllable:
-            current_gov = _read_current(SYSFS_GOVERNOR)
-            for btn_map in self.governor_buttons:
-                rb = btn_map.original_widget
-                rb.set_state(rb.label == current_gov, do_callback=False)
-
-        if self.epp_controllable:
-            current_epp = _read_current(SYSFS_EPP)
-            for btn_map in self.epp_buttons:
-                rb = btn_map.original_widget
-                rb.set_state(rb.label == current_epp, do_callback=False)
-
-        self.status_text.set_text("")
+        pass
 
     def _get_selected_governor(self) -> str | None:
         """Return the currently selected governor radio button label."""
-        for rb in self.governor_group:
-            if rb.state:
-                return rb.label
-        return None
+        pass
 
     def _get_selected_epp(self) -> str | None:
         """Return the currently selected EPP radio button label."""
-        for rb in self.epp_group:
-            if rb.state:
-                return rb.label
-        return None
+        pass
 
     def on_apply(self, _: object) -> None:
         """Apply the selected governor and/or EPP."""
-        errors = []
-
-        # Apply governor
-        if self.governor_controllable:
-            gov = self._get_selected_governor()
-            if gov:
-                try:
-                    _write_all_cores(_SYSFS_ALL_GOVERNORS, gov)
-                    logging.info("Set governor to %s", gov)
-                except OSError as e:
-                    logging.debug("Failed to set governor: %s", e)
-                    errors.append(str(e))
-
-        # Apply EPP
-        if self.epp_controllable:
-            epp = self._get_selected_epp()
-            if epp:
-                try:
-                    self._apply_epp(epp)
-                    logging.info("Set EPP to %s", epp)
-                except OSError as e:
-                    logging.debug("Failed to set EPP: %s", e)
-                    errors.append(str(e))
-
-        if errors:
-            self.status_text.set_text(("high temp txt", "\n".join(errors)))
-        else:
-            self.status_text.set_text("")
-            self.return_fn()
+        pass
 
     def _apply_epp(self, epp: str) -> None:
         """Apply EPP value using the best available method."""
-        # Prefer powerprofilesctl if available and EPP maps to a profile
-        if self.powerprofilesctl_exe and epp in _EPP_TO_PROFILE:
-            try:
-                _set_epp_via_powerprofilesctl(self.powerprofilesctl_exe, epp)
-                return
-            except OSError:
-                if self.can_write_epp:
-                    logging.debug("powerprofilesctl failed, falling back to sysfs")
-                else:
-                    raise
-        # Fall back to direct sysfs write
-        if self.can_write_epp:
-            _write_all_cores(_SYSFS_ALL_EPP, epp)
-            return
-        raise OSError(
-            f"Cannot set EPP to '{epp}': no powerprofilesctl mapping "
-            f"and no sysfs write permission"
-        )
+        pass
 
     def on_cancel(self, _: object) -> None:
         """Reset radio buttons to current state and close."""
-        self.refresh_state()
-        self.return_fn()
+        pass

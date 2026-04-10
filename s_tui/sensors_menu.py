@@ -120,38 +120,19 @@ class SensorsMenu:
         return self.size
 
     def set_checkbox_value(self):
-        for sensor, sensor_cb in self.sensor_button_dict.items():
-            sensor_cb_next_state = self.active_sensors[sensor]
-            for checkbox, state in zip(sensor_cb, sensor_cb_next_state):
-                checkbox.set_state(state)
+        pass
 
     def on_cancel(self, w):
-        self.set_checkbox_value()
-        self.return_fn(update=False)
+        pass
 
     def on_apply(self, w):
-        update_sensor_visibility = False
-        for s_name, sensor_buttons in self.sensor_button_dict.items():
-            cb_sensor_visibility = [
-                sensor_cb.get_state() for sensor_cb in sensor_buttons
-            ]
-
-            if cb_sensor_visibility != self.active_sensors[s_name]:
-                update_sensor_visibility = True
-
-            self.active_sensors[s_name] = cb_sensor_visibility
-
-        self.set_checkbox_value()
-        self.return_fn(update=update_sensor_visibility)
+        pass
 
     def setall_cb_col(self, w, col, state):
-        for s_name, sensor_buttons in self.sensor_button_dict.items():
-            if s_name == col:
-                for checkbox in sensor_buttons:
-                    checkbox.set_state(state)
+        pass
 
     def on_uncheckall_col(self, w, col):
-        self.setall_cb_col(self, col, False)
+        pass
 
     def on_checkall_col(self, w, col):
-        self.setall_cb_col(self, col, True)
+        pass
